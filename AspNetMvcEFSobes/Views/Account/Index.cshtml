@@ -1,0 +1,71 @@
+﻿@model IEnumerable<AspNetMvcEFSobes.Models.Account>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Список банковских счётов</h1>
+
+
+<hr />
+<p>
+    <a asp-action="Create">Создать банковский счёт</a>
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        Фильтрация по ID: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersonId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MoneyRUB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isJuridicalPerson)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr id="@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MoneyRUB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isJuridicalPerson)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a onclick="document.getElementById(@item.Id).remove();
+                    fetch(' @Url.Action("Delete","Account", new { id=item.Id} , "https" )' ,
+                    {
+                        method:'POST',
+                        headers:{},
+                    });
+                    alert('Банковский счёт был удалён');
+                    return false;
+
+                    " href="#">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

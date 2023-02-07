@@ -1,0 +1,70 @@
+﻿@model IEnumerable<AspNetMvcEFSobes.Models.Operation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Список операций</h1>
+<hr />
+<p>
+    <a asp-action="Create">Добавить операцию по счёту</a>
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        Фильтрация по ID банковского счёта: @Html.DropDownList("accountId",new SelectList(ViewBag.AccountIds))
+        <input type="submit" value="Search" />
+        <div>
+            <a asp-action="Index">Снять фильтр</a>
+        </div>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.isIncome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BalanceChange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr id="@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.isIncome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BalanceChange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a onclick="document.getElementById(@item.Id).remove();
+                    fetch(' @Url.Action("Delete","Operation", new { id=item.Id} , "https" )' ,
+                    {
+                        method:'POST',
+                        headers:{},
+                    });
+                    alert('Операция была удалена');
+                    return false;
+                    
+                    " href="#">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
